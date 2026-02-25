@@ -1,43 +1,880 @@
-<!DOCTYPE html>
+<2!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mark Portfolio</title>
-    <link rel="stylesheet" href="./css/main.css">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mark Joseph Batinga</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #09090c;
+  --ink:     #0f1015;
+  --card:    #14161c;
+  --line:    #1e2230;
+  --gold:    #c9915a;
+  --gold2:   #e3b07f;
+  --cream:   #ede8df;
+  --mist:    #707888;
+  --dim:     #2c3346;
+}
+
+/* ── BASE ── */s
+html { font-size: 16px; scroll-behavior: auto; }
+
+body {
+  background: var(--bg);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── CUSTOM CURSOR — desktop only ── */
+@media (pointer: fine) {
+  * { cursor: none !important; }
+  #dot, #ring {
+    position: fixed; border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    top: 0; left: 0;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+  }
+  #dot  { width: 6px; height: 6px; background: var(--gold); transition: transform .15s; }
+  #ring { width: 32px; height: 32px; border: 1px solid rgba(201,145,90,.28); transition: width .3s, height .3s; }
+  .big #dot  { transform: translate(-50%, -50%) scale(2.2); }
+  .big #ring { width: 52px; height: 52px; }
+}
+
+/* ── FIXED HEADER ── */
+#hd {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 400;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: clamp(16px,3vw,28px) clamp(20px,5vw,56px);
+  pointer-events: none;
+}
+#hd-logo {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(15px,2vw,20px);
+  font-weight: 300; letter-spacing: .04em;
+  color: var(--cream);
+  pointer-events: auto;
+}
+#hd-logo i { font-style: italic; color: var(--gold); }
+#hd-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(9px,1vw,11px); letter-spacing: .18em;
+  text-transform: uppercase; color: var(--mist);
+  transition: opacity .4s;
+  pointer-events: none;
+}
+
+/* ── VERTICAL PROGRESS ── */
+#vp {
+  position: fixed; left: 0; top: 0; bottom: 0;
+  width: 2px; z-index: 400;
+  background: var(--line);
+}
+#vp-fill {
+  width: 100%; background: linear-gradient(180deg, var(--gold), var(--gold2));
+  transition: height .6s cubic-bezier(.23,1,.32,1);
+  height: 0%;
+}
+
+/* ── NAV DOTS ── */
+#ndots {
+  position: fixed; right: clamp(16px,3vw,32px); top: 50%;
+  transform: translateY(-50%); z-index: 400;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.nd {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--dim); transition: all .3s;
+  cursor: pointer !important;
+  position: relative;
+}
+.nd::before {
+  content: attr(data-label);
+  position: absolute; right: 14px; top: 50%;
+  transform: translateY(-50%);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--gold);
+  white-space: nowrap; opacity: 0;
+  transition: opacity .2s;
+  pointer-events: none;
+}
+.nd:hover::before { opacity: 1; }
+.nd.on { background: var(--gold); transform: scale(1.8); }
+
+/* ── SECTIONS CONTAINER ── */
+/* The trick: translate the whole thing, driven by JS */
+#scroller {
+  position: fixed; top: 0; left: 0; width: 100%;
+  will-change: transform;
+  /* transition driven by JS via lerp — no CSS transition here */
+}
+
+section {
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+/* decorative bg number */
+.bg-n {
+  position: absolute;
+  font-family: 'Fraunces', serif;
+  font-size: min(32vw, 280px);
+  font-weight: 700; font-style: italic;
+  color: rgba(255,255,255,.018);
+  pointer-events: none; user-select: none;
+  line-height: 1;
+}
+
+/* thin vertical accent line inside sections */
+.sl {
+  position: absolute; left: clamp(20px,5vw,56px);
+  top: 10%; bottom: 10%; width: 1px;
+  background: var(--line);
+}
+
+/* ── SECTION INNER PADDING ── */
+.s-inner {
+  padding: clamp(80px,10vh,110px) clamp(28px,7vw,80px) clamp(40px,6vh,60px) clamp(40px,8vw,96px);
+  display: flex; gap: clamp(32px,5vw,80px);
+  width: 100%; align-items: center;
+  flex-wrap: wrap;
+}
+
+/* section label/num */
+.s-num {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(64px,10vw,120px);
+  font-weight: 300; line-height: 1; color: var(--line);
+}
+.s-label {
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(9px,1vw,11px); letter-spacing: .2em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 10px;
+}
+.s-label::before { content: ''; width: 18px; height: 1px; background: var(--gold); }
+.s-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(32px,5vw,60px);
+  font-weight: 300; line-height: 1.05;
+  color: var(--cream);
+}
+.s-title i { font-style: italic; color: var(--gold); }
+.g-rule { width: 28px; height: 1px; background: var(--gold); margin: 20px 0; }
+.body-text {
+  font-size: clamp(13px,1.3vw,15px);
+  color: var(--mist); line-height: 1.85;
+  margin-bottom: 14px;
+}
+.body-text b { color: var(--cream); font-weight: 500; }
+
+/* ─────────────────────────────────
+   HERO
+───────────────────────────────── */
+#s0 { background: var(--bg); flex-direction: column; justify-content: flex-end; }
+#s0 .bg-n { right: -4vw; bottom: -4vh; }
+#s0 .sl { left: clamp(20px,5vw,56px); }
+
+.h-tag {
+  position: absolute; top: clamp(80px,12vh,110px); left: clamp(40px,8vw,96px);
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(9px,1vw,11px); letter-spacing: .2em;
+  text-transform: uppercase; color: var(--gold);
+  display: flex; align-items: center; gap: 10px;
+}
+.h-tag::before { content: ''; width: 18px; height: 1px; background: var(--gold); }
+
+.h-body {
+  padding: 0 clamp(28px,7vw,80px) clamp(48px,7vh,72px) clamp(40px,8vw,96px);
+  position: relative; z-index: 2;
+  width: 100%;
+}
+.h-name {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(60px,11vw,160px);
+  font-weight: 300; line-height: .88;
+  letter-spacing: -3px; margin-bottom: clamp(24px,3vh,40px);
+}
+.h-name span { display: block; }
+.h-name .italic { font-style: italic; color: var(--gold); }
+
+.h-foot {
+  display: flex; align-items: flex-end;
+  justify-content: space-between; flex-wrap: wrap;
+  gap: 24px;
+}
+.h-desc {
+  font-size: clamp(13px,1.3vw,15px);
+  color: var(--mist); line-height: 1.85;
+  max-width: 440px;
+}
+.h-desc b { color: var(--cream); font-weight: 500; }
+.h-stats { display: flex; gap: clamp(24px,4vw,52px); }
+.hs-n {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(30px,4vw,52px);
+  font-weight: 300; font-style: italic;
+  color: var(--gold); line-height: 1;
+}
+.hs-l {
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(8px,.9vw,10px); letter-spacing: .12em;
+  text-transform: uppercase; color: var(--dim); margin-top: 4px;
+}
+
+/* ─────────────────────────────────
+   ABOUT
+───────────────────────────────── */
+#s1 { background: var(--ink); }
+#s1 .bg-n { right: -2vw; top: 50%; transform: translateY(-50%); }
+.about-l { flex: 0 0 clamp(240px,35vw,420px); }
+.about-r {
+  flex: 1; min-width: 260px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--line);
+  border: 1px solid var(--line);
+  align-self: center;
+}
+.ab {
+  background: var(--card); padding: clamp(16px,2vw,24px) clamp(18px,2.5vw,28px);
+  transition: background .22s;
+}
+.ab:hover { background: var(--ink); }
+.ab-l {
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(8px,.9vw,10px); letter-spacing: .16em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+}
+.ab-v { font-size: clamp(12px,1.2vw,14px); color: var(--cream); line-height: 1.5; }
+.ab-v.sm { font-family: 'DM Mono', monospace; font-size: clamp(10px,1vw,12px); color: var(--mist); }
+
+/* ─────────────────────────────────
+   EXPERIENCE
+───────────────────────────────── */
+#s2 { background: var(--bg); }
+#s2 .s-inner { align-items: stretch; flex-wrap: nowrap; gap: 0; }
+.exp-l {
+  flex: 0 0 clamp(200px,22vw,280px);
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 16px; padding-right: clamp(20px,3vw,40px);
+  border-right: 1px solid var(--line);
+}
+/* Horizontally scrollable cards */
+.exp-cards {
+  flex: 1; display: flex; gap: 1px;
+  background: var(--line);
+  overflow-x: auto; overflow-y: hidden;
+  scrollbar-width: none; cursor: grab;
+  border: 1px solid var(--line);
+  align-self: stretch;
+  -webkit-overflow-scrolling: touch;
+}
+.exp-cards::-webkit-scrollbar { display: none; }
+.exp-cards.drag { cursor: grabbing !important; }
+.ec {
+  flex: 0 0 clamp(200px,22vw,270px);
+  background: var(--card);
+  padding: clamp(20px,3vh,36px) clamp(16px,2vw,24px);
+  display: flex; flex-direction: column; gap: 10px;
+  transition: background .25s; position: relative;
+}
+.ec::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background: var(--gold);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .4s cubic-bezier(.23,1,.32,1);
+}
+.ec:hover { background: var(--ink); }
+.ec:hover::after { transform: scaleX(1); }
+.ec:hover .ec-n { color: var(--gold); }
+.ec-n {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(36px,5vw,56px); font-weight: 300; font-style: italic;
+  color: var(--line); line-height: 1; transition: color .3s;
+}
+.ec-per {
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(8px,.9vw,10px); letter-spacing: .1em;
+  text-transform: uppercase; color: var(--gold);
+}
+.ec-role {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(16px,2vw,22px); font-weight: 300;
+  color: var(--cream); line-height: 1.2;
+}
+.ec-co { font-size: clamp(11px,1.1vw,13px); color: var(--mist); }
+.ec-pts { list-style: none; flex: 1; }
+.ec-pts li {
+  font-size: clamp(11px,1.1vw,13px); color: var(--mist);
+  line-height: 1.7; padding: 4px 0 4px 12px;
+  border-bottom: 1px solid var(--line); position: relative;
+}
+.ec-pts li::before { content: '·'; position: absolute; left: 0; color: var(--gold); font-size: 18px; line-height: 1.2; }
+.ec-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: auto; padding-top: 10px; }
+.et {
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(8px,.9vw,10px); padding: 2px 7px;
+  border: 1px solid var(--line); color: var(--dim);
+  transition: all .2s;
+}
+.ec:hover .et { border-color: rgba(201,145,90,.3); color: var(--gold); }
+
+/* drag hint */
+.drag-hint {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--dim);
+  margin-top: 12px; display: flex; align-items: center; gap: 6px;
+}
+.drag-hint::before { content: '← '; color: var(--gold); }
+.drag-hint::after  { content: ' →'; color: var(--gold); }
+
+/* ─────────────────────────────────
+   PROJECTS
+───────────────────────────────── */
+#s3 { background: var(--ink); }
+#s3 .s-inner { align-items: stretch; flex-wrap: nowrap; gap: 0; }
+.proj-l {
+  flex: 0 0 clamp(180px,20vw,240px);
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 16px; padding-right: clamp(20px,3vw,40px);
+  border-right: 1px solid var(--line);
+}
+.proj-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1px; background: var(--line);
+  border: 1px solid var(--line);
+  align-self: stretch;
+}
+.pc {
+  background: var(--card);
+  padding: clamp(16px,2vh,24px) clamp(14px,1.8vw,22px);
+  display: flex; flex-direction: column; gap: 6px;
+  transition: background .25s; position: relative; overflow: hidden;
+}
+.pc::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 1px; background: var(--gold);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .4s cubic-bezier(.23,1,.32,1);
+}
+.pc:hover { background: var(--bg); }
+.pc:hover::before { transform: scaleX(1); }
+.pc-i {
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(8px,.9vw,10px); letter-spacing: .1em; color: var(--gold);
+}
+.pc-type {
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(8px,.9vw,10px); letter-spacing: .08em;
+  text-transform: uppercase; color: var(--dim);
+}
+.pc-name {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(14px,1.6vw,19px); font-weight: 300;
+  color: var(--cream); line-height: 1.2;
+}
+.pc-desc { font-size: clamp(11px,1.1vw,12.5px); color: var(--mist); line-height: 1.65; flex: 1; }
+.pc-tech { display: flex; flex-wrap: wrap; gap: 3px; margin-top: auto; }
+.pc-tech span {
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(8px,.9vw,9.5px); padding: 2px 6px;
+  border: 1px solid var(--line); color: var(--dim); transition: all .2s;
+}
+.pc:hover .pc-tech span { border-color: rgba(201,145,90,.25); color: var(--gold); }
+
+/* ─────────────────────────────────
+   SKILLS
+───────────────────────────────── */
+#s4 { background: var(--bg); }
+.skills-l { flex: 0 0 clamp(200px,25vw,300px); }
+.skills-r {
+  flex: 1; min-width: 260px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1px; background: var(--line);
+  border: 1px solid var(--line);
+  align-self: center;
+}
+.sg { background: var(--card); padding: clamp(14px,1.8vw,22px) clamp(14px,2vw,24px); transition: background .22s; }
+.sg:hover { background: var(--ink); }
+.sg-l {
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(8px,.9vw,10px); letter-spacing: .16em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 10px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.sp-wrap { display: flex; flex-wrap: wrap; gap: 4px; }
+.sp {
+  font-size: clamp(10px,1vw,12px); padding: 3px 8px;
+  border: 1px solid var(--line); color: var(--mist);
+  transition: all .15s;
+}
+.sp:hover { border-color: var(--gold); color: var(--cream); background: rgba(201,145,90,.06); }
+
+/* ─────────────────────────────────
+   CONTACT
+───────────────────────────────── */
+#s5 { background: var(--ink); }
+#s5 .bg-n { right: -2vw; top: 50%; transform: translateY(-50%); }
+.contact-l { flex: 0 1 clamp(260px,40vw,480px); }
+.c-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(44px,7vw,96px);
+  font-weight: 300; line-height: .9;
+  letter-spacing: -2px; margin: 16px 0 24px;
+}
+.c-title i { font-style: italic; color: var(--gold); display: block; }
+.c-sub { font-size: clamp(13px,1.3vw,15px); color: var(--mist); line-height: 1.85; }
+.contact-r { flex: 1; min-width: 260px; display: flex; flex-direction: column; gap: 2px; }
+.cl {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: clamp(14px,1.8vh,18px) clamp(16px,2vw,22px);
+  border: 1px solid var(--line);
+  color: var(--mist); text-decoration: none;
+  font-family: 'DM Mono', monospace; font-size: clamp(10px,1.1vw,12px);
+  background: var(--card); transition: all .25s;
+}
+.cl:hover { border-color: var(--gold); color: var(--cream); padding-left: clamp(22px,3vw,32px); background: var(--bg); }
+.cl-a { color: var(--gold); opacity: 0; transform: translateX(-8px); transition: all .25s; }
+.cl:hover .cl-a { opacity: 1; transform: translateX(0); }
+
+/* ── MOBILE — normal scroll ── */
+@media (max-width: 768px) {
+  /* undo the fixed scroller — everything flows normally */
+  #scroller { position: static; transform: none !important; }
+  section { height: auto; min-height: 100svh; }
+  #ndots, #vp, #dot, #ring { display: none; }
+  #hd { background: rgba(9,9,12,.92); backdrop-filter: blur(10px); }
+
+  /* hero */
+  #s0 { flex-direction: column; justify-content: flex-end; }
+  #s0 .h-body { padding: 0 24px 48px; }
+  .h-tag { left: 24px; top: 80px; }
+  .h-name { font-size: clamp(52px,14vw,80px); letter-spacing: -1px; }
+  .h-foot { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .h-stats { gap: 24px; }
+
+  /* about */
+  #s1 .s-inner { flex-direction: column; }
+  .about-l { flex: none; width: 100%; }
+  .about-r { grid-template-columns: 1fr 1fr; width: 100%; }
+
+  /* experience — keep horizontal drag scrolling */
+  #s2 .s-inner { flex-direction: column; gap: 20px; }
+  .exp-l { border-right: none; border-bottom: 1px solid var(--line); padding: 0 0 20px; flex: none; width: 100%; }
+  .exp-cards { align-self: auto; border: 1px solid var(--line); }
+  .ec { flex: 0 0 260px; }
+
+  /* projects */
+  #s3 .s-inner { flex-direction: column; gap: 20px; }
+  .proj-l { border-right: none; border-bottom: 1px solid var(--line); padding: 0 0 20px; flex: none; width: 100%; }
+  .proj-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; width: 100%; }
+
+  /* skills */
+  #s4 .s-inner { flex-direction: column; }
+  .skills-l { flex: none; width: 100%; }
+  .skills-r { grid-template-columns: 1fr 1fr; width: 100%; }
+
+  /* contact */
+  #s5 .s-inner { flex-direction: column; gap: 28px; }
+  .contact-l, .contact-r { flex: none; width: 100%; min-width: unset; }
+
+  .bg-n { display: none; }
+  .sl { display: none; }
+}
+
+@media (max-width: 480px) {
+  .about-r, .skills-r { grid-template-columns: 1fr; }
+  .proj-grid { grid-template-columns: 1fr; }
+  .h-stats { gap: 16px; }
+}
+</style>
 </head>
 <body>
-    <header>
-        <div class="title-box">
-            <h2 class="logo-title"><span>M</span>A</h2>
-            <h2 class="logo-title">R<span>K</span> </h2>
+
+<div id="dot"></div>
+<div id="ring"></div>
+
+<!-- HEADER -->
+<header id="hd">
+  <div id="hd-logo"><i>M</i>ark Batinga</div>
+  <div id="hd-tag">Backend Developer · Open to Work</div>
+</header>
+
+<!-- VERTICAL PROGRESS -->
+<div id="vp"><div id="vp-fill"></div></div>
+
+<!-- NAV DOTS -->
+<div id="ndots">
+  <div class="nd on" data-i="0" data-label="Home"></div>
+  <div class="nd" data-i="1" data-label="About"></div>
+  <div class="nd" data-i="2" data-label="Experience"></div>
+  <div class="nd" data-i="3" data-label="Projects"></div>
+  <div class="nd" data-i="4" data-label="Skills"></div>
+  <div class="nd" data-i="5" data-label="Contact"></div>
+</div>
+
+<!-- SCROLLER -->
+<div id="scroller">
+
+  <!-- ── HERO ── -->
+  <section id="s0">
+    <div class="bg-n">01</div>
+    <div class="sl"></div>
+    <div class="h-tag">Available for opportunities</div>
+    <div class="h-body">
+      <h1 class="h-name">
+        <span>Mark</span>
+        <span class="italic">Joseph</span>
+        <span>Batinga</span>
+      </h1>
+      <div class="h-foot">
+        <p class="h-desc">Building <b>scalable APIs</b>, cloud infrastructure, and full-cycle web products. Zambales, Philippines — open to global remote opportunities.</p>
+        <div class="h-stats">
+          <div><div class="hs-n">2+</div><div class="hs-l">Yrs Exp.</div></div>
+          <div><div class="hs-n">10+</div><div class="hs-l">Projects</div></div>
+          <div><div class="hs-n">91.37</div><div class="hs-l">GPA · Laude</div></div>
         </div>
-        <div class="link-box">
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Expertise</a></li>
-                <li><a href="#">Portfolio</a></li>
-                <li><a href="#">Resume</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section id="s1">
+    <div class="bg-n" style="right:-2vw;top:50%;transform:translateY(-50%)">02</div>
+    <div class="sl"></div>
+    <div class="s-inner">
+      <div class="about-l">
+        <div class="s-num">02</div>
+        <div class="s-label">About Me</div>
+        <div class="s-title">Who I <i>Am</i></div>
+        <div class="g-rule"></div>
+        <p class="body-text">I'm a <b>Backend Developer</b> from Zambales, Philippines specializing in <b>Laravel/PHP APIs</b>, <b>AWS cloud infrastructure</b>, and DevOps. I bring technical depth and proven team leadership.</p>
+        <p class="body-text">Currently at <b>Customised Group Pty Ltd (Custm)</b>. Previously Team Leader at <b>DevstrucMedia</b>. Graduated <b>Cum Laude</b> — PhilNITS IT Passport certified.</p>
+      </div>
+      <div class="about-r">
+        <div class="ab"><div class="ab-l">Location</div><div class="ab-v">Zambales, Philippines</div></div>
+        <div class="ab"><div class="ab-l">Status</div><div class="ab-v" style="color:var(--gold)">Open to Work</div></div>
+        <div class="ab"><div class="ab-l">Education</div><div class="ab-v">BS Information Technology<br><small style="color:var(--mist)">DMMMSU — Cum Laude, 91.37</small></div></div>
+        <div class="ab"><div class="ab-l">Certification</div><div class="ab-v">PhilNITS IT Passport</div></div>
+        <div class="ab"><div class="ab-l">Email</div><div class="ab-v sm">batingamarkjoseph@gmail.com</div></div>
+        <div class="ab"><div class="ab-l">Phone</div><div class="ab-v sm">(+63) 9501109163</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── EXPERIENCE ── -->
+  <section id="s2">
+    <div class="sl"></div>
+    <div class="s-inner">
+      <div class="exp-l">
+        <div class="s-num">03</div>
+        <div class="s-label">Experience</div>
+        <div class="s-title">Work <i>History</i></div>
+        <div class="g-rule"></div>
+        <p class="body-text">Five professional roles across backend, leadership, and full-stack development.</p>
+        <div class="drag-hint">Drag to explore</div>
+      </div>
+      <div class="exp-cards" id="expCards">
+        <div class="ec">
+          <div class="ec-n">01</div>
+          <div class="ec-per">Sept 2024 — Present</div>
+          <div class="ec-role">Backend Developer</div>
+          <div class="ec-co">Customised Group Pty Ltd · Remote</div>
+          <ul class="ec-pts">
+            <li>Designed &amp; maintained RESTful APIs in Laravel/PHP for scalable systems.</li>
+            <li>Managed Bitbucket CI/CD pipelines for Angular &amp; Laravel deployments.</li>
+            <li>Deployed full AWS stack (EC2, RDS, S3, ALB, CloudWatch) with full security configs.</li>
+            <li>Integrated Zoho, Machship, Google APIs, Mapbox, Xero; monitored via Datadog.</li>
+          </ul>
+          <div class="ec-tags"><span class="et">Laravel</span><span class="et">AWS</span><span class="et">Angular</span><span class="et">MySQL</span><span class="et">CI/CD</span><span class="et">Datadog</span></div>
         </div>
-    </header>
-    <section class="home">
-        <div class="left-cont">
-            <div class="text-box">
-                <h3 class="hello-txt">--- Hello</h3>
-                <h1 class="name-txt">I'm <span>Mark Joseph</span> Batinga</h1>
-                <p class="home-txt">This is Mark Joseph Batinga, a web/software developer located
-                    at Zambales, Philippines. My area of expertise is creating responsive
-                    and interactive websites and applications that improve the lives of 
-                    people.</p>
-            </div>
-            <button class="download-btn">Dowload CV</button>
+        <div class="ec">
+          <div class="ec-n">02</div>
+          <div class="ec-per">May 2024 — Sept 2024</div>
+          <div class="ec-role">Team Leader</div>
+          <div class="ec-co">DevstrucMedia · Remote</div>
+          <ul class="ec-pts">
+            <li>Led procurement system with GoHighLevel email automation for thousands of users.</li>
+            <li>Integrated LiveWebinar automation through ArchieBot and GHL APIs.</li>
+            <li>Mentored team, reviewed code, and maintained project documentation.</li>
+          </ul>
+          <div class="ec-tags"><span class="et">GoHighLevel</span><span class="et">Laravel</span><span class="et">Stripe</span><span class="et">Bitbucket</span></div>
         </div>
-        <div class="right-cont">
-            <img src="./imgs/mark-1.png" alt="mark-home" class="home-img">
+        <div class="ec">
+          <div class="ec-n">03</div>
+          <div class="ec-per">Sept 2023 — May 2024</div>
+          <div class="ec-role">Web Developer</div>
+          <div class="ec-co">DevstrucMedia · Remote</div>
+          <ul class="ec-pts">
+            <li>Maintained international procurement system with robust error management.</li>
+            <li>Integrated Stripe, RevenueCat, GHL, FedEx, and Aramex APIs.</li>
+            <li>Built iSingHawaii site with booking, payments &amp; admin dashboard.</li>
+          </ul>
+          <div class="ec-tags"><span class="et">CodeIgniter</span><span class="et">WordPress</span><span class="et">Stripe</span><span class="et">PHP</span></div>
         </div>
-    </section>
+        <div class="ec">
+          <div class="ec-n">04</div>
+          <div class="ec-per">June 2023 — May 2024</div>
+          <div class="ec-role">Junior System Developer</div>
+          <div class="ec-co">KODIT IT Consultancy · Philippines</div>
+          <ul class="ec-pts">
+            <li>Built full LMS: enrollment, payroll, attendance, and payment modules.</li>
+            <li>Automated accounting reports — cashflow, balance sheet, withholding tax.</li>
+            <li>Introduced MARC e-library with QR code access for book cataloging.</li>
+          </ul>
+          <div class="ec-tags"><span class="et">CodeIgniter</span><span class="et">PHP</span><span class="et">MySQL</span></div>
+        </div>
+        <div class="ec">
+          <div class="ec-n">05</div>
+          <div class="ec-per">Mar — May 2023</div>
+          <div class="ec-role">Backend Dev / Project Leader</div>
+          <div class="ec-co">DICT Region 1 · Internship</div>
+          <ul class="ec-pts">
+            <li>Led a module for a government procurement system.</li>
+            <li>Built with ReactJS, MongoDB, Firebase MagicLink auth &amp; Express.</li>
+            <li>Implemented Redux for global state management.</li>
+          </ul>
+          <div class="ec-tags"><span class="et">ReactJS</span><span class="et">MongoDB</span><span class="et">Firebase</span><span class="et">Node.js</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROJECTS ── -->
+  <section id="s3">
+    <div class="sl"></div>
+    <div class="s-inner">
+      <div class="proj-l">
+        <div class="s-num">04</div>
+        <div class="s-label">Projects</div>
+        <div class="s-title">Selected <i>Work</i></div>
+        <div class="g-rule"></div>
+        <p class="body-text">AR, e-commerce, civic tech, healthcare, and enterprise systems.</p>
+      </div>
+      <div class="proj-grid">
+        <div class="pc">
+          <div class="pc-i">01/06</div><div class="pc-type">Thesis · AR</div>
+          <div class="pc-name">MLook Campus AR</div>
+          <p class="pc-desc">Augmented reality campus guide using Vuforia &amp; Unity, Firebase NoSQL, and Blender 3D models.</p>
+          <div class="pc-tech"><span>C#</span><span>Unity</span><span>Vuforia</span><span>Firebase</span></div>
+        </div>
+        <div class="pc">
+          <div class="pc-i">02/06</div><div class="pc-type">College · E-Commerce</div>
+          <div class="pc-name">Likha Art Marketplace</div>
+          <p class="pc-desc">Digital artwork e-commerce with ASP.NET MVC, reusable components, and full auth.</p>
+          <div class="pc-tech"><span>C#</span><span>ASP.NET</span><span>MSSQL</span></div>
+        </div>
+        <div class="pc">
+          <div class="pc-i">03/06</div><div class="pc-type">College · Food Delivery</div>
+          <div class="pc-name">Pasada Delivery System</div>
+          <p class="pc-desc">Full-stack food delivery with OOP PHP, password hashing, and encryption.</p>
+          <div class="pc-tech"><span>PHP</span><span>MySQL</span><span>JavaScript</span></div>
+        </div>
+        <div class="pc">
+          <div class="pc-i">04/06</div><div class="pc-type">Freelance · Healthcare</div>
+          <div class="pc-name">Vaccination Management System</div>
+          <p class="pc-desc">Vaccination records management with full admin dashboard in C# and ASP.NET.</p>
+          <div class="pc-tech"><span>C#</span><span>ASP.NET</span><span>MySQL</span></div>
+        </div>
+        <div class="pc">
+          <div class="pc-i">05/06</div><div class="pc-type">Freelance · Civic Tech</div>
+          <div class="pc-name">E-Butos Voting System</div>
+          <p class="pc-desc">Secure e-voting with real-time tallying, auth, and a results dashboard.</p>
+          <div class="pc-tech"><span>PHP</span><span>MySQL</span><span>JavaScript</span></div>
+        </div>
+        <div class="pc">
+          <div class="pc-i">06/06</div><div class="pc-type">Freelance · Gov</div>
+          <div class="pc-name">LGU Naguilian HR System</div>
+          <p class="pc-desc">HR management for a Local Government Unit — records, attendance, and workflows.</p>
+          <div class="pc-tech"><span>PHP</span><span>MySQL</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SKILLS ── -->
+  <section id="s4">
+    <div class="sl"></div>
+    <div class="s-inner">
+      <div class="skills-l">
+        <div class="s-num">05</div>
+        <div class="s-label">Skills</div>
+        <div class="s-title">Tech <i>Stack</i></div>
+        <div class="g-rule"></div>
+        <p class="body-text">20+ technologies across frontend, backend, cloud, and integrations.</p>
+      </div>
+      <div class="skills-r">
+        <div class="sg"><div class="sg-l">Front End</div><div class="sp-wrap"><span class="sp">HTML5</span><span class="sp">CSS3</span><span class="sp">JavaScript</span><span class="sp">React</span><span class="sp">Angular</span><span class="sp">Vue.js</span><span class="sp">Bootstrap</span><span class="sp">Tailwind</span><span class="sp">WordPress</span><span class="sp">Figma</span></div></div>
+        <div class="sg"><div class="sg-l">Back End</div><div class="sp-wrap"><span class="sp">Laravel</span><span class="sp">CodeIgniter</span><span class="sp">PHP</span><span class="sp">Node.js</span><span class="sp">Express</span><span class="sp">Python</span><span class="sp">C#</span><span class="sp">Java</span><span class="sp">MySQL</span><span class="sp">MongoDB</span><span class="sp">Firebase</span></div></div>
+        <div class="sg"><div class="sg-l">DevOps &amp; Cloud</div><div class="sp-wrap"><span class="sp">AWS EC2</span><span class="sp">RDS</span><span class="sp">S3</span><span class="sp">CloudWatch</span><span class="sp">CI/CD</span><span class="sp">Bitbucket</span><span class="sp">Ubuntu</span><span class="sp">cPanel</span><span class="sp">SSL/TLS</span><span class="sp">Datadog</span><span class="sp">Docker</span></div></div>
+        <div class="sg"><div class="sg-l">API Integrations</div><div class="sp-wrap"><span class="sp">GoHighLevel</span><span class="sp">Stripe</span><span class="sp">Zoho</span><span class="sp">Machship</span><span class="sp">Xero</span><span class="sp">Google APIs</span><span class="sp">Mapbox</span><span class="sp">Mailgun</span><span class="sp">FedEx</span></div></div>
+        <div class="sg"><div class="sg-l">Tools &amp; Practices</div><div class="sp-wrap"><span class="sp">Git</span><span class="sp">Jira</span><span class="sp">Postman</span><span class="sp">Agile/Scrum</span><span class="sp">OOP</span><span class="sp">MVC</span><span class="sp">Unit Testing</span></div></div>
+        <div class="sg"><div class="sg-l">Creative &amp; Other</div><div class="sp-wrap"><span class="sp">Unity</span><span class="sp">Vuforia AR</span><span class="sp">Blender 3D</span><span class="sp">ASP.NET</span><span class="sp">.NET Desktop</span><span class="sp">Redux</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section id="s5">
+    <div class="bg-n" style="right:-2vw;top:50%;transform:translateY(-50%)">06</div>
+    <div class="sl"></div>
+    <div class="s-inner">
+      <div class="contact-l">
+        <div class="s-num" style="color:var(--line)">06</div>
+        <div class="s-label">Contact</div>
+        <div class="c-title">Let's <i>Work Together</i></div>
+        <p class="c-sub">Open to backend roles, full-stack projects, and remote opportunities. Based in the Philippines — available globally.</p>
+      </div>
+      <div class="contact-r">
+        <a href="mailto:batingamarkjoseph@gmail.com" class="cl"><span>batingamarkjoseph@gmail.com</span><span class="cl-a">↗</span></a>
+        <a href="tel:+639501109163" class="cl"><span>(+63) 9501109163</span><span class="cl-a">↗</span></a>
+        <a href="https://linkedin.com/in/mark-joseph-batinga-047745229" target="_blank" class="cl"><span>LinkedIn Profile</span><span class="cl-a">↗</span></a>
+        <a href="https://github.com/MarkJosephBatinga" target="_blank" class="cl"><span>GitHub — MarkJosephBatinga</span><span class="cl-a">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /scroller -->
+
+<script>
+(function(){
+
+const isMobile = () => window.innerWidth <= 768;
+
+/* ─── DESKTOP: immersive wheel-driven lerp scroll ─── */
+if (!isMobile()) {
+  const scroller = document.getElementById('scroller');
+  const sections = Array.from(document.querySelectorAll('section'));
+  const N = sections.length;
+  const dots = Array.from(document.querySelectorAll('.nd'));
+  const fill = document.getElementById('vp-fill');
+  const tag  = document.getElementById('hd-tag');
+  const labels = ['Backend Developer · Open to Work','About Me','Work History','Selected Work','Tech Stack','Let\'s Connect'];
+
+  let targetY  = 0;
+  let currentY = 0;
+  let current  = 0;
+  let locked   = false;
+  let ease     = 0.08;
+
+  function vh() { return window.innerHeight; }
+
+  /* lerp render loop */
+  let raf;
+  function tick() {
+    const diff = targetY - currentY;
+    currentY += diff * ease;
+    if (Math.abs(diff) < .05) currentY = targetY;
+    scroller.style.transform = `translateY(${-currentY}px)`;
+    raf = requestAnimationFrame(tick);
+  }
+  tick();
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= N) return;
+    current = idx;
+    targetY = idx * vh();
+
+    /* update UI */
+    dots.forEach((d,i) => d.classList.toggle('on', i===idx));
+    fill.style.height = (idx / (N-1) * 100) + '%';
+    tag.textContent = labels[idx];
+
+    locked = true;
+    setTimeout(() => locked = false, 1000);
+  }
+
+  /* wheel → snap sections */
+  let wheelBuf = 0;
+  let wheelTimer;
+  window.addEventListener('wheel', e => {
+    e.preventDefault();
+    if (locked) return;
+    wheelBuf += e.deltaY;
+    clearTimeout(wheelTimer);
+    wheelTimer = setTimeout(() => { wheelBuf = 0; }, 150);
+    if (Math.abs(wheelBuf) > 80) {
+      goTo(current + (wheelBuf > 0 ? 1 : -1));
+      wheelBuf = 0;
+    }
+  }, { passive: false });
+
+  /* keyboard */
+  window.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); goTo(current+1); }
+    if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  { e.preventDefault(); goTo(current-1); }
+  });
+
+  /* dots */
+  dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.i)));
+
+  /* touch */
+  let ty0 = 0;
+  window.addEventListener('touchstart', e => { ty0 = e.touches[0].clientY; }, {passive:true});
+  window.addEventListener('touchend',   e => {
+    const dy = ty0 - e.changedTouches[0].clientY;
+    if (Math.abs(dy) > 48) goTo(current + (dy > 0 ? 1 : -1));
+  }, {passive:true});
+
+  /* resize */
+  window.addEventListener('resize', () => {
+    currentY = current * vh();
+    targetY  = currentY;
+  });
+
+  goTo(0);
+
+  /* ── cursor ── */
+  const dot  = document.getElementById('dot');
+  const ring = document.getElementById('ring');
+  if (dot) {
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove', e => {
+      mx=e.clientX; my=e.clientY;
+      dot.style.left=mx+'px'; dot.style.top=my+'px';
+    });
+    (function cl(){
+      rx += (mx-rx)*.11; ry += (my-ry)*.11;
+      ring.style.left=rx+'px'; ring.style.top=ry+'px';
+      requestAnimationFrame(cl);
+    })();
+    document.querySelectorAll('a,.nd,.sp,.pc,.ec,.ab,.cl').forEach(el=>{
+      el.addEventListener('mouseenter',()=>document.body.classList.add('big'));
+      el.addEventListener('mouseleave',()=>document.body.classList.remove('big'));
+    });
+  }
+
+} /* end desktop */
+
+/* ─── DRAG scroll for experience cards ─── */
+const wrap = document.getElementById('expCards');
+if (wrap) {
+  let down=false, sx=0, sl=0;
+  wrap.addEventListener('mousedown',  e=>{ down=true; sx=e.pageX; sl=wrap.scrollLeft; wrap.classList.add('drag'); });
+  window.addEventListener('mouseup',  ()=>{ down=false; wrap.classList.remove('drag'); });
+  window.addEventListener('mousemove',e=>{ if(!down) return; wrap.scrollLeft = sl-(e.pageX-sx)*1.3; });
+}
+
+})();
+</script>
 </body>
 </html>
