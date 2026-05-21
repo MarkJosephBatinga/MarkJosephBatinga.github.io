@@ -3,7 +3,7 @@
 function TerminalHero() {
   const lines = [
     { kind: "cmd",    user: "mjb", host: "mbp", path: "~/portfolio", text: "whoami" },
-    { kind: "out",    text: "Mark Joseph Batinga — Backend Developer" },
+    { kind: "out",    text: "Mark Joseph Batinga — Freelance Fullstack Developer" },
     { kind: "out",    text: "San Narciso, Zambales, PH · available for remote" },
     { kind: "blank" },
     { kind: "cmd",    user: "mjb", host: "mbp", path: "~/portfolio", text: "cat stack.json | jq '.primary'" },
@@ -12,7 +12,7 @@ function TerminalHero() {
     { kind: "cmd",    user: "mjb", host: "mbp", path: "~/portfolio", text: "curl -s api/status" },
     { kind: "out-ok", text: '{ "status": "ok", "uptime": "99.98%", "pager": "quiet" }' },
     { kind: "blank" },
-    { kind: "cmd",    user: "mjb", host: "mbp", path: "~/portfolio", text: "./hire-me.sh --remote --backend" },
+    { kind: "cmd",    user: "mjb", host: "mbp", path: "~/portfolio", text: "./hire-me.sh --remote --fullstack --freelance" },
     { kind: "out-ok", text: "✔ listening on :4040 — let's talk." },
   ];
 
@@ -113,11 +113,10 @@ function Hero() {
               <span>available · remote · full-time or contract</span>
             </div>
             <h1>
-              Backend developer<br />
-              <span className="slash">//</span> building <span className="accent">reliable</span><br />
-              systems, quietly.
+              Freelance fullstack<br />
+              developer for <span className="accent">hire</span>.
             </h1>
-            <p className="hero-sub">{d.tagline} APIs, data layers, integrations, and the deploy scripts nobody wants to write.</p>
+            <p className="hero-sub">{d.tagline}</p>
             <div className="hero-ctas">
               <a className="btn primary" href="#contact">
                 <span>$</span> ./hire-me.sh

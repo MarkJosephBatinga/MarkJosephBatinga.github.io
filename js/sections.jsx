@@ -317,8 +317,8 @@ function Contact() {
         <SectionHead num="/09" title="Contact" sub="$ ./hire-me.sh" />
         <div className="contact-grid">
           <div className="contact-intro">
-            <h2>Have a backend<br />that needs to <span className="accent">work</span>?</h2>
-            <p>I'm open to full-time remote roles and focused contract work. APIs, data layers, integrations, legacy rescue. Tell me what's broken.</p>
+            <h2>Need a freelance<br />developer who <span className="accent">ships</span>?</h2>
+            <p>I'm open to freelance contracts, full-time remote roles, and focused project work. Fullstack web apps, APIs, integrations, legacy rescue. Tell me what you need built.</p>
             <div className="contact-channels">
               <a href={`mailto:${d.email}`}>
                 <span className="k">email</span><span className="v">{d.email}</span>

@@ -1,7 +1,7 @@
 // All portfolio content lives here — edit this file to update anything on the site
 const DATA = {
   name: "Mark Joseph Batinga",
-  role: "Backend Developer",
+  role: "Freelance Fullstack Developer",
   location: "San Narciso, Zambales, PH",
   email: "batingamarkjoseph@gmail.com",
   phone: "+63 950 110 9163",
@@ -9,10 +9,10 @@ const DATA = {
   linkedin: "mark-joseph-batinga-047745229",
   resume: "Batinga-MarkJoseph-Resume.pdf",
 
-  tagline: "I build reliable APIs, clean data layers, and systems that don't wake you up at 3 AM.",
+  tagline: "From UI to API — I build, deploy, and ship complete web applications. Freelance, remote-ready, Philippines.",
   intro: [
-    "I'm a backend developer from the Philippines with 3+ years shipping production systems — RESTful APIs on Laravel & Node, relational & NoSQL data layers, and the deploy scripts nobody wants to write.",
-    "Currently building & maintaining backend services for Customised Group (Melbourne, remote), previously led development teams at DevstrucMedia and KODIT. I care about boring technology, clear contracts, and writing code that the next person can actually read."
+    "I'm a freelance fullstack developer from the Philippines with 3+ years shipping production systems — RESTful APIs on Laravel & Node, React frontends, relational & NoSQL data layers, and the deploy scripts nobody wants to write.",
+    "Available for hire. Currently building & maintaining fullstack systems for Customised Group (Melbourne, remote), previously led development teams at DevstrucMedia and KODIT. I care about boring technology, clear contracts, and writing code that the next person can actually read."
   ],
 
   facts: [
@@ -176,23 +176,23 @@ const DATA = {
   services: [
     {
       num: "01",
+      title: "Fullstack web app development",
+      desc: "End-to-end web applications — React frontends, Laravel or Node backends, database design, and cloud deploy. One freelance developer, whole product.",
+    },
+    {
+      num: "02",
       title: "API design & build",
       desc: "Clean, documented REST APIs in Laravel or Node. Versioning, auth, pagination, idempotency — the parts the tutorials skip.",
     },
     {
-      num: "02",
-      title: "Database & performance",
-      desc: "Schema design, query tuning, indexes that earn their keep. MySQL, SQL Server, or MongoDB — I pick the boring right one.",
-    },
-    {
       num: "03",
-      title: "Integrations & automation",
-      desc: "Stripe, shipping, CRM, webinar, bespoke third-party APIs. Retries, idempotency keys, and failure paths you can actually debug.",
+      title: "Frontend development",
+      desc: "React UIs that connect cleanly to the API layer. Responsive layouts, state management with Redux, and component libraries that scale.",
     },
     {
       num: "04",
-      title: "Legacy rescue & refactor",
-      desc: "Taking over a codebase nobody wants to touch. Stabilize, document, introduce tests, then move.",
+      title: "Integrations & automation",
+      desc: "Stripe, shipping, CRM, webinar, bespoke third-party APIs. Retries, idempotency keys, and failure paths you can actually debug.",
     },
     {
       num: "05",
@@ -201,8 +201,8 @@ const DATA = {
     },
     {
       num: "06",
-      title: "Team lead / mentorship",
-      desc: "Running standups, reviewing PRs, writing the docs juniors learn from. I've led dev teams before and enjoy it.",
+      title: "Legacy rescue & refactor",
+      desc: "Taking over a codebase nobody wants to touch. Stabilize, document, introduce tests, then move.",
     },
   ],
 
