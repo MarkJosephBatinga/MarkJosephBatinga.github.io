@@ -16,11 +16,13 @@
   <meta property="og:url"         content="https://markjosephbatinga.github.io/">
   <meta property="og:title"       content="Mark Joseph Batinga — Freelance Fullstack Developer Philippines">
   <meta property="og:description" content="Freelance fullstack developer from the Philippines. Laravel, Node.js, React, AWS. Available for hire — remote-ready, fast delivery.">
+  <meta property="og:image"       content="https://markjosephbatinga.github.io/assets/og-image.jpg">
 
   <!-- Twitter / X card -->
-  <meta name="twitter:card"        content="summary">
+  <meta name="twitter:card"        content="summary_large_image">
   <meta name="twitter:title"       content="Mark Joseph Batinga — Freelance Fullstack Developer Philippines">
   <meta name="twitter:description" content="Freelance fullstack developer from the Philippines. Laravel, Node.js, React, AWS. Available for hire — remote-ready, fast delivery.">
+  <meta name="twitter:image"       content="https://markjosephbatinga.github.io/assets/og-image.jpg">
 
   <!-- Structured data — this is what makes Google show your name, role, and links in search results -->
   <script type="application/ld+json">
@@ -55,7 +57,73 @@
 </head>
 <body>
 
-  <div id="root"></div>
+  <div id="root">
+    <!--
+      ============================================================
+      STATIC SEO FALLBACK
+      Google reads this on its first-pass crawl (before JS runs).
+      React replaces it entirely when it mounts — visitors never see this.
+      DO NOT REMOVE.
+      ============================================================
+    -->
+    <main aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
+      <h1>Mark Joseph Batinga</h1>
+      <p>Fullstack Developer &amp; Cloud Engineer based in San Narciso, Zambales, Philippines. Available for freelance work — remote-ready, fast delivery.</p>
+
+      <h2>About</h2>
+      <p>
+        I am a fullstack developer and cloud engineer with hands-on experience building and maintaining production Laravel SaaS platforms on AWS.
+        Currently working as the sole engineer at Customised Group Pty Ltd (Custm), an Australian logistics SaaS company,
+        where I own the full infrastructure — from EC2, S3, CloudFront, WAF, and CloudWatch to CI/CD pipelines and multi-tenant architecture.
+      </p>
+
+      <h2>Skills &amp; Technologies</h2>
+      <p>
+        <strong>Backend:</strong> Laravel, PHP, Node.js, REST APIs, Multi-tenant SaaS (stancl/tenancy), JWT Auth, WebSockets (Laravel Reverb)<br>
+        <strong>Frontend:</strong> React, Angular, HTML, CSS, JavaScript<br>
+        <strong>Cloud &amp; DevOps:</strong> AWS (EC2, S3, CloudFront, WAF, CloudWatch, Secrets Manager, SSM), Bitbucket Pipelines, CI/CD, Nginx, Linux<br>
+        <strong>Databases:</strong> MySQL, MongoDB<br>
+        <strong>Other:</strong> Git, Bitbucket, REST API design, SaaS architecture, Agile
+      </p>
+
+      <h2>Experience</h2>
+      <p>
+        <strong>Cloud &amp; Fullstack Engineer — Customised Group Pty Ltd (Custm), Australia</strong><br>
+        Sole engineer responsible for all AWS infrastructure, Laravel SaaS development, CI/CD pipelines, and multi-tenant architecture.
+        Built and deployed custm-client-api (Laravel 12 multi-tenant API), managed staging and production environments,
+        and led AWS security hardening including WAF, security headers, and IP-restricted bucket policies.
+      </p>
+      <p>
+        <strong>Team Leader &amp; Web Developer — DevstrucMedia</strong><br>
+        Led web development projects and a small development team until September 2024.
+      </p>
+      <p>
+        <strong>Junior System Developer — KODIT IT Consultancy</strong><br>
+        Developed and maintained internal systems for enterprise clients.
+      </p>
+
+      <h2>Education</h2>
+      <p>
+        <strong>Bachelor of Science in Information Technology, Cum Laude</strong><br>
+        Don Mariano Marcos Memorial State University<br>
+        PhilNITS IT Passport Certification
+      </p>
+
+      <h2>Contact &amp; Links</h2>
+      <p>
+        <a href="https://github.com/markjosephbatinga">GitHub</a> ·
+        <a href="https://www.linkedin.com/in/mark-joseph-batinga-047745229">LinkedIn</a> ·
+        <a href="mailto:batingamarkjoseph@gmail.com">batingamarkjoseph@gmail.com</a>
+      </p>
+    </main>
+    <!-- END STATIC SEO FALLBACK -->
+  </div>
+
+  <noscript>
+    <p style="font-family:sans-serif;text-align:center;padding:2rem;">
+      This portfolio requires JavaScript to display the full experience. Please enable JavaScript in your browser.
+    </p>
+  </noscript>
 
   <script>
     // Default theme settings — the TweaksPanel can change these at runtime
