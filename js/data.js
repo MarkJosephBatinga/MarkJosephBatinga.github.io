@@ -4,7 +4,7 @@ const DATA = {
   role: "Freelance Fullstack Developer",
   location: "San Narciso, Zambales, PH",
   email: "batingamarkjoseph@gmail.com",
-  phone: "+63 950 110 9163",
+  facebook: "https://www.facebook.com/markjoseph.batinga/",
   github: "markjosephbatinga",
   linkedin: "mark-joseph-batinga-047745229",
   resume: "Batinga-MarkJoseph-Resume.pdf",

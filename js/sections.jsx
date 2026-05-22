@@ -329,8 +329,8 @@ function Contact() {
               <a href={`https://linkedin.com/in/${d.linkedin}`} target="_blank" rel="noreferrer">
                 <span className="k">linkedin</span><span className="v">/in/{d.linkedin.slice(0, 24)}…</span>
               </a>
-              <a href={`tel:${d.phone.replace(/\s/g, '')}`}>
-                <span className="k">phone</span><span className="v">{d.phone}</span>
+              <a href={d.facebook} target="_blank" rel="noopener noreferrer">
+                <span className="k">facebook</span><span className="v">markjoseph.batinga</span>
               </a>
               <a href={d.resume} download>
                 <span className="k">resume</span><span className="v">Batinga-MarkJoseph-Resume.pdf ↓</span>
