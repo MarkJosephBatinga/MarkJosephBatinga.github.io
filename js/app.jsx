@@ -40,8 +40,9 @@ function Nav() {
           <a href="#services"     className="secondary"><span className="hash">/</span>services</a>
           <a href="#stats"        className="secondary"><span className="hash">/</span>stats</a>
           <a href="#writing"      className="secondary"><span className="hash">/</span>writing</a>
+          <a href="#contact"><span className="hash">/</span>contact</a>
         </div>
-        <a href="#contact" className="nav-cta">./hire-me.sh</a>
+        <a href="/freelance-web-developer-philippines/" className="nav-cta">./hire-me.sh</a>
       </div>
     </div>
   );

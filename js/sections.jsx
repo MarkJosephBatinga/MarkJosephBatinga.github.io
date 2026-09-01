@@ -320,6 +320,9 @@ function Contact() {
             <h2>Need a freelance<br />developer who <span className="accent">ships</span>?</h2>
             <p>I'm open to freelance contracts, full-time remote roles, and focused project work. Fullstack web apps, APIs, integrations, legacy rescue. Tell me what you need built.</p>
             <div className="contact-channels">
+              <a href="/freelance-web-developer-philippines/">
+                <span className="k">hiring?</span><span className="v">freelance web developer, Philippines →</span>
+              </a>
               <a href={`mailto:${d.email}`}>
                 <span className="k">email</span><span className="v">{d.email}</span>
               </a>
